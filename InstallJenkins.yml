@@ -3,60 +3,37 @@
   hosts: controlnode
   become: true
 
-    - name: Add Jenkins apt repository key using apt-key adv
-      command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 5BA31D57EF5975CA
-      register: add_key_result
-      ignore_errors: yes
-      retries: 5
-      delay: 10
-      until: add_key_result.rc == 0
+- name: Add Jenkins apt repository key
+  apt_key:
+    url: https://pkg.jenkins.io/debian-stable/jenkins.io.key  # Use the correct URL
+    state: present
 
-    - name: Add Jenkins apt repository
-      apt_repository:
-        repo: "deb https://pkg.jenkins.io/debian-stable binary/"
-        state: present
-      retries: 5
-      delay: 10
-      until: result is success
-      register: result
+- name: Add Jenkins apt repository
+  apt_repository:
+    repo: "deb https://pkg.jenkins.io/debian-stable binary/"
+    state: present
 
-    - name: Update apt cache
-      apt:
-        update_cache: yes
-      retries: 5
-      delay: 10
-      until: result is success
-      register: result
+- name: Update apt cache
+  apt:
+    update_cache: yes
 
-    - name: Install Java Runtime Environment
-      apt:
-        name: openjdk-11-jre
-        state: present
-      retries: 5
-      delay: 10
-      until: result is success
-      register: result
+- name: Install Java Runtime Environment
+  apt:
+    name: openjdk-11-jre
+    state: present
 
-    - name: Install Jenkins package
-      apt:
-        name: jenkins
-        state: present
-      retries: 5
-      delay: 10
-      until: result is success
-      register: result
+- name: Install Jenkins package
+  apt:
+    name: jenkins
+    state: present
 
-    - name: Install additional packages
-      apt:
-        name: fontconfig
-        state: present
-      retries: 5
-      delay: 10
-      until: result is success
-      register: result
+- name: Install additional packages
+  apt:
+    name: fontconfig
+    state: present
 
-    - name: Start Jenkins service
-      service:
-        name: jenkins
-        state: started
-        enabled: yes
+- name: Start Jenkins service
+  service:
+    name: jenkins
+    state: started
+    enabled: yes
