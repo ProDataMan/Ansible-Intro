@@ -2,6 +2,7 @@
 - name: Install Jenkins
   hosts: controlnode
   become: true
+  tasks:
 
 - name: Add Jenkins apt repository
   apt_repository:
