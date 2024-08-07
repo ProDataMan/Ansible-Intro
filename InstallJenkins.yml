@@ -1,6 +1,6 @@
 ---
 - name: Install Jenkins
-  hosts: webservers
+  hosts: controlnode
   become: true
   tasks:
     - name: Add Jenkins apt repository key
